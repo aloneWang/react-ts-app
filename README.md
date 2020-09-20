@@ -1,44 +1,87 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 学习react组件开发，顺带学ts
 
-## Available Scripts
+## ts
+### 关键字 
++ type 
+  类型别名，会给一个类型起个新名字， type 有时候 和 interface 很像
++ extends
+  继承关键字
++ keyof
+  索引类型操作符，对任何类型， keyof T 的结果为 T 上 已知的公共属性名的联合
++ Exclude
+  type Exclude<T, U> = T extends U ? never : T;
+  注意：
+  ```
+  Exclude<"1"| "2", "3"|"1"> ==
+  Exclude<"1", "3"|"1"> | 
+  Exclude<"2", "3"|"1">
+  ===> never | "2" ===> "2"
+  ```
++ Pick
+  ```
+    type Pick<T, K extends keyof T> = {
+      [key in k]: T[key]
+    }
+  ```
+  从一个复合类型中，取出几个想要的类型的组合
 
-In the project directory, you can run:
 
-### `npm start`
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## React api
+####  setState 更新 state 
+语法
++ this.setState({comment: 'hellow'})
++ this.setState((state, props) => {
+  return {}
+})
+第二种语法用来解决 异步更新state
+## context
+创建一个 context 对象，解决结构层次多的组件传参，类似 Vue 的 provide/inject
+避免 一层一层 传入 props
+## API
++ React.createContext
+  ```
+  const context = React.createContext(defaultValue)
+  但 <context.Provider> 组件 没提供 value 属性 ，才会使用 defaultValue 值
+  ```
++ context.Provider
+  context 对象会返回一个 Provider React 组件，允许 消费组件（子组件） 订阅 context 的变化
++ context.contextType
+  挂在 class 上 contextType 属性上被赋值一个 context。可以 `this.context ` 来访问 最近的 context的 值
+  ```
+  class MyClass extends React.Component {
+    componentDidMount() {
+      let value = this.context;
+      /* 在组件挂载完成后，使用 MyContext 组件的值来执行一些有副作用的操作 */
+    }
+    render() {
+      let value = this.context;
+      /* 基于 MyContext 组件的值进行渲染 */
+    }
+  }
+  MyClass.contextType = MyContext;
+  也可以在 class 里 设置 static contextType =  MyContext
+  ```
++ context.Consumer
+  `<context.Consumer>` 这里的  React 组件 也能订阅到  context 的变化
+  ```
+  <context.Consumer>
+    // 这里 需要 函数 作为 子元素， 接收当前的 context 值， 如果最近的 provider 组件 没有 value值 ，则 取 default value
+  </<context.Consumer>>
+  ```
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## React 命名空间
+#### MouseEventHandler 事件句柄 泛型
 
-### `npm run build`
+#### React.FC
+react 函数组件 接口类型
+```
+const Footre: React.FC<P> = () => {
+  //
+}
+```
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 三方组件
+rc-motion 动画组件
