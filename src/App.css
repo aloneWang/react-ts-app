@@ -36,4 +36,7 @@
     transform: rotate(360deg);
   }
 }
+.gg{
+  text-overflow: clip
+}
 @import '~antd/dist/antd.css';
