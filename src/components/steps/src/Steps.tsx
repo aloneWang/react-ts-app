@@ -93,7 +93,6 @@ export default class Steps extends React.Component<StepsProps> {
       [`${prefixCls}-dot`]: !!progressDot,
       [`${prefixCls}-navigation`]: isNav,
     });
-
     return (
       <div className={classString} style={style} {...restProps}>
         {toArray(children).map((child, index) => {

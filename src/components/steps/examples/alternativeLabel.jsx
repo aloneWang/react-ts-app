@@ -8,7 +8,12 @@ const description =
 
 export default () => (
   <Steps labelPlacement="vertical" current={1}>
-    <Step title="已完成" description={description} />
+    {
+      [1,2,3].map((__,index)=>(
+        <Step title="已完成1" description={description} key={index}/>
+      ))
+    }
+    <Step title="已完成1" description={description} />
     <Step title="进行中" description={description} />
     <Step title="待运行" description={description} />
     <Step title="待运行" description={description} />
