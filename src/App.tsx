@@ -1,28 +1,24 @@
 import React from 'react';
-import logo from './logo.svg';
-import { Button } from 'antd'
 import Steps from './components/steps/examples/alternativeLabel'
+import Test from './components/test'
+import Tabs, { TabPane } from './components/tabs'
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <Button type="dashed"></Button>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-      <Steps />
+      <Tabs defaultActiveKey="2">
+        <TabPane tab="tab 1" key="1">
+          第1个
+        </TabPane>
+        <TabPane tab="tab 2" key="2">
+          第2个
+        </TabPane>
+        <TabPane tab="tab 3" key="3">
+          第3个
+        </TabPane>
+      </Tabs>
+      {/* <Steps /> */}
     </div>
   );
 }
