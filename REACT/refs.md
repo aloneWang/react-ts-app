@@ -5,7 +5,7 @@
   创建refs
 + React.useRef
   hook 函数, 返回一个ref对象，获取dom对象
-  注意：当ref对象变化时，useRef 不会通知你，变更 .current 属性，不会造成重新渲染
+  注意：当ref对象变化时，useRef 不会通知你，变更 .current 属性，不会造成重新渲染， 若想在 React 绑定或解绑 dom 运行 代码，则使用 `回调refs`
 
 ```
 class MyComponent extends React.Component {
