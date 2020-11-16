@@ -4,10 +4,10 @@ import { TabPaneProps } from './TabPanelList/TabPane'
 export type TabPosition = 'left' | 'right' | 'top' | 'bottom';
 
 export interface TabSize {
-    width: number;
-    height: number;
-    top: number;
-    left: number;
+    width?: number;
+    height?: number;
+    top?: number;
+    left?: number;
 }
 export type TabSizeMap = Map<React.Key,TabSize> 
 

@@ -2,24 +2,54 @@ import TabContext from '../TabContext'
 import classNames from 'classnames'
 import * as React from 'react'
 import TabNode from './TabNode'
-
+import { useRafState } from '../../../util/hook/useRaf'
+import useRefs from '../../../util/hook/useRefs'
 import {
     TabPosition,
+    TabSize,
+    TabSizeMap
 } from '../interface'
 export interface TabNavListProps {
     tabPosition: TabPosition;
     className?: string;
     style?: React.CSSProperties,
+    activeKey: string;
     onTabClick: (key: string, e: React.KeyboardEvent | React.MouseEvent) => void
 }
 
 function TabNavList({
     className,
     style,
-    onTabClick
+    onTabClick,
+    activeKey
 }: TabNavListProps, ref: React.Ref<HTMLDivElement>) {
+    console.log("组件更新")
     const { prefixCls, tabs } = React.useContext(TabContext)
     
+    const [tabsizes, setTabSizes] = useRafState<TabSizeMap>(new Map())
+
+    const [getRefKey] = useRefs<HTMLDivElement>()
+
+    React.useEffect(()=>{
+        setTabSizes(() =>{
+            let newtabSize: TabSizeMap = new Map()
+            tabs.forEach( tab => {
+                const {key} = tab
+                const tabNode = getRefKey(key)
+                const {offsetWidth, offsetLeft} = tabNode.current
+                newtabSize.set(key, {
+                    width: offsetWidth,
+                    left: offsetLeft
+                })
+            })
+            return newtabSize
+        })
+    },[])
+
+    
+    // map
+    // const taboffset = useOffset(tabsizes)
+
     // =================== Tab =======================
     // tabNav
     const tabNodes: React.ReactElement[] = tabs.map( tab => {
@@ -29,6 +59,7 @@ function TabNavList({
                 tab={tab}
                 prefixCls={prefixCls}
                 key={key}
+                ref={ getRefKey(key) }
                 onClick={(e) => {
                     onTabClick(key, e)
                 }}
@@ -36,6 +67,11 @@ function TabNavList({
         )
         
     })
+    
+    let inkStyle: React.CSSProperties = {}
+    if(activeKey) {
+        inkStyle = tabsizes.get(activeKey)
+    }
     return (
         <div
             role="tablist"
@@ -45,6 +81,7 @@ function TabNavList({
             { tabNodes }
             <div
                 className={classNames(`${prefixCls}-ink-bar`)}
+                style={inkStyle}
             >
 
             </div>

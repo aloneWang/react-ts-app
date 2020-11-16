@@ -21,6 +21,7 @@ function TabNode({
                 role="tab"
                 className={`${tabPrefix}-btn`}
                 tabIndex={disabled ? null : 0}
+                ref={ref}
                 onClick={ e => {
                     onClick(e)
                 }}
