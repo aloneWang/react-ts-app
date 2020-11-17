@@ -20,6 +20,9 @@ export type TabOffsetMap = Map<React.Key,TabOffset>
 export interface AnimatedConfig {
     inkBar: boolean;
 }
+
+export type renderTabBar = (props: any, defaultComponent: React.ComponentType<typeof props>)=> React.ReactElement
+
 export interface Tab extends TabPaneProps {
     key: string;
     node: React.ReactElement

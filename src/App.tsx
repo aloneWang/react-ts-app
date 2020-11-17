@@ -5,9 +5,18 @@ import Tabs, { TabPane } from './components/tabs'
 import './App.css';
 
 function App() {
+
+  const renderTabBar = (props, DefaultTabBar) => (
+    <div className="rendertab">
+      <DefaultTabBar
+        {...props} 
+      />
+    </div>
+  )
+
   return (
     <div className="App">
-      <Tabs defaultActiveKey="2">
+      <Tabs defaultActiveKey="2" renderTabBar={renderTabBar}>
         <TabPane tab="tab 1" key="1">
           第1个
         </TabPane>

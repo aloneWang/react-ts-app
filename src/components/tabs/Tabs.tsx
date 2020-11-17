@@ -10,7 +10,8 @@ import TabPane from './TabPanelList/TabPane'
 import {
     TabPosition,
     Tab,
-    AnimatedConfig
+    AnimatedConfig,
+    renderTabBar
 } from './interface'
 import { TabPaneProps } from './TabPanelList/TabPane';
 import TabNavList from './TabNavList'
@@ -23,6 +24,7 @@ export interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
     childrend?: React.ReactNode;
     animated?: boolean | AnimatedConfig;
     activeKey?: string;
+    renderTabBar?: renderTabBar
     defaultActiveKey?: string;
     tabPosition?: TabPosition;
     onTabClick?: (activeKey: string, e: React.KeyboardEvent | React.MouseEvent) => void;
@@ -52,6 +54,7 @@ function Tabs({
     animated = {
         inkBar: true
     },
+    renderTabBar,
     defaultActiveKey,
     tabPosition = 'top',
     onTabClick,
@@ -101,7 +104,11 @@ function Tabs({
         onTabClick: musterClick  // TanNode 点击触发回到顶层执行
     }
     // 一些 props 传入 NavBar
-    tabNavBar = <TabNavList {...tabNavBarProps}/>
+    if(renderTabBar) {
+        tabNavBar = renderTabBar(tabNavBarProps, TabNavList)
+    } else {
+        tabNavBar = <TabNavList {...tabNavBarProps}/>
+    }
     
     return (
         <TabContext.Provider value={{tabs, prefixCls}}>
