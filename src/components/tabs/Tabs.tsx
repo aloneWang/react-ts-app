@@ -9,7 +9,8 @@ import TabPane from './TabPanelList/TabPane'
 
 import {
     TabPosition,
-    Tab
+    Tab,
+    AnimatedConfig
 } from './interface'
 import { TabPaneProps } from './TabPanelList/TabPane';
 import TabNavList from './TabNavList'
@@ -20,7 +21,7 @@ export interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
     className?: string;
     style?: React.CSSProperties;
     childrend?: React.ReactNode;
-    
+    animated?: boolean | AnimatedConfig;
     activeKey?: string;
     defaultActiveKey?: string;
     tabPosition?: TabPosition;
@@ -48,6 +49,9 @@ function Tabs({
     className,
     children,
     activeKey,
+    animated = {
+        inkBar: true
+    },
     defaultActiveKey,
     tabPosition = 'top',
     onTabClick,
@@ -55,7 +59,24 @@ function Tabs({
 
 }:TabsProps, ref: React.Ref<HTMLDivElement>) {
     const tabs = parseTabList(children)
+    console.log('tab')
 
+    // 处理 过渡 props 格式
+    let mergedAnimated: AnimatedConfig 
+    if(animated === false) {
+        mergedAnimated = {
+            inkBar: false
+        }
+    } else if(animated === true){
+        mergedAnimated = {
+            inkBar: true
+        }
+    } else {
+        mergedAnimated = {
+            inkBar: true,
+            ...(typeof animated === 'object' ? animated : {})
+        }
+    }
     // ===================== Active Key =========================
     const [mergedActiveKey, setMergedActiveKey] = useMergedState<string>(() => tabs[0]?.key, {
         value: activeKey,
@@ -64,6 +85,7 @@ function Tabs({
     const shareProps = {
         activeKey: mergedActiveKey,
         tabPosition: tabPosition,
+        animated:mergedAnimated
     }
 
     // 点击触发 处理

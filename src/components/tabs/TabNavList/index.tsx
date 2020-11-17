@@ -5,6 +5,7 @@ import TabNode from './TabNode'
 import { useRafState } from '../../../util/hook/useRaf'
 import useRefs from '../../../util/hook/useRefs'
 import {
+    AnimatedConfig,
     TabPosition,
     TabSize,
     TabSizeMap
@@ -14,6 +15,7 @@ export interface TabNavListProps {
     className?: string;
     style?: React.CSSProperties,
     activeKey: string;
+    animated: AnimatedConfig
     onTabClick: (key: string, e: React.KeyboardEvent | React.MouseEvent) => void
 }
 
@@ -21,7 +23,8 @@ function TabNavList({
     className,
     style,
     onTabClick,
-    activeKey
+    activeKey,
+    animated
 }: TabNavListProps, ref: React.Ref<HTMLDivElement>) {
     console.log("组件更新")
     const { prefixCls, tabs } = React.useContext(TabContext)
@@ -80,7 +83,9 @@ function TabNavList({
         >
             { tabNodes }
             <div
-                className={classNames(`${prefixCls}-ink-bar`)}
+                className={classNames(
+                    `${prefixCls}-ink-bar`,
+                    {[`${prefixCls}-ink-bar-animated`]:  animated.inkBar})}
                 style={inkStyle}
             >
 

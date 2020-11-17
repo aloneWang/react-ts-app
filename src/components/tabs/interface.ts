@@ -17,6 +17,9 @@ export interface TabOffset extends TabSizeMap {
 
 export type TabOffsetMap = Map<React.Key,TabOffset>
 
+export interface AnimatedConfig {
+    inkBar: boolean;
+}
 export interface Tab extends TabPaneProps {
     key: string;
     node: React.ReactElement
