@@ -24,7 +24,7 @@ export default function useMergedState<T, R= T>(
         return typeof defaultSetValue === 'function' ? (defaultSetValue as any)() : defaultSetValue;
     })
 
-    let mergedValue = (value && value) || innerValue
+    let mergedValue = value  || innerValue
 
     function triggerChange(newValue:T):void {
         setInnerval(newValue)

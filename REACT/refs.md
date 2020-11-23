@@ -6,6 +6,7 @@
 + React.useRef
   hook 函数, 返回一个ref对象，获取dom对象
   注意：当ref对象变化时，useRef 不会通知你，变更 .current 属性，不会造成重新渲染， 若想在 React 绑定或解绑 dom 运行 代码，则使用 `回调refs`
+  useRef 返回的对象 在组件 的整个周期 中 都是保持不变的
 
 ```
 class MyComponent extends React.Component {
@@ -20,7 +21,11 @@ class MyComponent extends React.Component {
   }
 }
 ``` 
-`this.ref 是对 绑定 ref属性最低层 的dom引用`, 这个 api 只对 class 组件有效， （函数组件中 使用 forwardRef）
+`注意：函数组件不能使用 refs 属性，因为它没有实例， 可以使用 forwardRef api ,接受 ref 再传入 DOM`
+### 访问refs
+ref.current 属性 指向 元素 的 引用
++ 当 ref属性 用于 HTML 时候， 其 current 值 接受 最底层的 DOM 元素
++ 当 ref 属性 用于 class 组件 时， 其 current 值 接受 class 组件 的实例
 ## 回调 refs
 另一种 设置 refs 的方式
 ```

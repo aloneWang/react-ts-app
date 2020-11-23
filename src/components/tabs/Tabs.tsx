@@ -17,6 +17,7 @@ import { TabPaneProps } from './TabPanelList/TabPane';
 import TabNavList from './TabNavList'
 import TabContext from './TabContext'
 
+import ResizeObserver from 'resize-observer-polyfill'
 export interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
     prefixCls?: string;
     className?: string;
@@ -24,7 +25,8 @@ export interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
     childrend?: React.ReactNode;
     animated?: boolean | AnimatedConfig;
     activeKey?: string;
-    renderTabBar?: renderTabBar
+    renderTabBar?: renderTabBar,
+    tabBarGutter?: number,
     defaultActiveKey?: string;
     tabPosition?: TabPosition;
     onTabClick?: (activeKey: string, e: React.KeyboardEvent | React.MouseEvent) => void;
@@ -55,6 +57,7 @@ function Tabs({
         inkBar: true
     },
     renderTabBar,
+    tabBarGutter,
     defaultActiveKey,
     tabPosition = 'top',
     onTabClick,
@@ -62,7 +65,6 @@ function Tabs({
 
 }:TabsProps, ref: React.Ref<HTMLDivElement>) {
     const tabs = parseTabList(children)
-    console.log('tab')
 
     // 处理 过渡 props 格式
     let mergedAnimated: AnimatedConfig 
@@ -101,6 +103,7 @@ function Tabs({
 
     const tabNavBarProps = {
         ...shareProps, 
+        tabBarGutter,
         onTabClick: musterClick  // TanNode 点击触发回到顶层执行
     }
     // 一些 props 传入 NavBar

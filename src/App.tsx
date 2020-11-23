@@ -16,7 +16,7 @@ function App() {
 
   return (
     <div className="App">
-      <Tabs defaultActiveKey="2" renderTabBar={renderTabBar}>
+      <Tabs defaultActiveKey="2" renderTabBar={renderTabBar} tabBarGutter={12}>
         <TabPane tab="tab 1" key="1">
           第1个
         </TabPane>

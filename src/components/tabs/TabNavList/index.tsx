@@ -2,8 +2,10 @@ import TabContext from '../TabContext'
 import classNames from 'classnames'
 import * as React from 'react'
 import TabNode from './TabNode'
-import { useRafState } from '../../../util/hook/useRaf'
+import useRaf, { useRafState } from '../../../util/hook/useRaf'
 import useRefs from '../../../util/hook/useRefs'
+import ReactResizeObserver from '../../resizeObserver'
+
 import {
     AnimatedConfig,
     TabPosition,
@@ -15,7 +17,8 @@ export interface TabNavListProps {
     className?: string;
     style?: React.CSSProperties,
     activeKey: string;
-    animated: AnimatedConfig
+    animated: AnimatedConfig,
+    tabBarGutter?: number,
     onTabClick: (key: string, e: React.KeyboardEvent | React.MouseEvent) => void
 }
 
@@ -24,16 +27,18 @@ function TabNavList({
     style,
     onTabClick,
     activeKey,
-    animated
+    animated,
+    tabBarGutter
 }: TabNavListProps, ref: React.Ref<HTMLDivElement>) {
     console.log("组件更新")
+
     const { prefixCls, tabs } = React.useContext(TabContext)
     
     const [tabsizes, setTabSizes] = useRafState<TabSizeMap>(new Map())
-
-    const [getRefKey] = useRefs<HTMLDivElement>()
-
-    React.useEffect(()=>{
+    
+    const [getRefKey, removeRef] = useRefs<HTMLDivElement>()
+    
+    const resizeObserveElement = useRaf( () => {
         setTabSizes(() =>{
             let newtabSize: TabSizeMap = new Map()
             tabs.forEach( tab => {
@@ -47,8 +52,7 @@ function TabNavList({
             })
             return newtabSize
         })
-    },[])
-
+    })
     
     // map
     // const taboffset = useOffset(tabsizes)
@@ -63,6 +67,7 @@ function TabNavList({
                 prefixCls={prefixCls}
                 key={key}
                 ref={ getRefKey(key) }
+                tabBarGutter={tabBarGutter}
                 onClick={(e) => {
                     onTabClick(key, e)
                 }}
@@ -75,22 +80,25 @@ function TabNavList({
     if(activeKey) {
         inkStyle = tabsizes.get(activeKey)
     }
-    return (
-        <div
-            role="tablist"
-            className={classNames(`${prefixCls}-nav`, className)}
-            style={style}
-        >
-            { tabNodes }
-            <div
-                className={classNames(
-                    `${prefixCls}-ink-bar`,
-                    {[`${prefixCls}-ink-bar-animated`]:  animated.inkBar})}
-                style={inkStyle}
-            >
 
+    return (
+        <ReactResizeObserver onResize={resizeObserveElement}>
+            <div
+                role="tablist"
+                className={classNames(`${prefixCls}-nav`, className)}
+                style={style}
+            >
+                { tabNodes }
+                <div
+                    className={classNames(
+                        `${prefixCls}-ink-bar`,
+                        {[`${prefixCls}-ink-bar-animated`]:  animated.inkBar})}
+                    style={inkStyle}
+                >
+
+                </div>
             </div>
-        </div>
+        </ReactResizeObserver>
     )
 
 }
