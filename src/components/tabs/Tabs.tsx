@@ -17,7 +17,6 @@ import { TabPaneProps } from './TabPanelList/TabPane';
 import TabNavList from './TabNavList'
 import TabContext from './TabContext'
 
-import ResizeObserver from 'resize-observer-polyfill'
 export interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
     prefixCls?: string;
     className?: string;
