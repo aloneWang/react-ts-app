@@ -1,7 +1,7 @@
 import { type } from 'os'
 import * as React from 'react'
 
-export type UploadMethods = 'get'| 'POST'| 'PATCH' | 'PUT' |'post' | 'patch' | 'put' 
+export type UploadMethods = 'POST'| 'PATCH' | 'PUT' |'post' | 'patch' | 'put' 
 
 // input props
 export interface UploadProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>,  'onError' | 'onProgress'> {
