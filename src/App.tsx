@@ -1,9 +1,11 @@
 import React from 'react';
 import Steps from './components/steps/examples/alternativeLabel'
 import Test from './components/test'
+import Upload from './components/upload'
 import Tabs, { TabPane } from './components/tabs'
 import './App.css';
 
+import {UploadProps} from './components/upload/interface'
 function App() {
 
   const renderTabBar = (props, DefaultTabBar) => (
@@ -13,7 +15,17 @@ function App() {
       />
     </div>
   )
-
+  const uploadProps:UploadProps = {
+    onSuccess(xhr, body) {
+      console.log(body)
+    },
+    onError(e: Error) {
+      console.log(e)
+    },
+    action: '/api/upload',
+    method: 'post',
+    name: 'img'
+  }  
   return (
     <div className="App">
       <Tabs defaultActiveKey="2" renderTabBar={renderTabBar} tabBarGutter={12}>
@@ -28,6 +40,7 @@ function App() {
         </TabPane>
       </Tabs>
       {/* <Steps /> */}
+      <Upload {...uploadProps}/>
     </div>
   );
 }

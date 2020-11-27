@@ -69,13 +69,13 @@ function request(options: RequestOptions) {
     }
     // 加载完
     xhr.onload = function(e) {
-        if(xhr.status > 200 || xhr.status < 300) {
+        if(xhr.status < 200 || xhr.status >= 300) {
             options.onError(getError(options, xhr), getBody(xhr))
             return
         }
-        return options.onSuccess(xhr, getBody(xhr))
+        return options.onSuccess?.(xhr, getBody(xhr))
     }
-
+    // 初始化请求， 设置请求头在初始化之后设置
     xhr.open(method, action, true)
 
 
