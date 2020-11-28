@@ -22,7 +22,7 @@ function App() {
     onError(e: Error) {
       console.log(e)
     },
-    action: '/api/upload',
+    action: '/api/upload', // 在 nodeServe 仓库中
     method: 'post',
     name: 'img'
   }  

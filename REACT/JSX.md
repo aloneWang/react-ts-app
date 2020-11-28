@@ -67,3 +67,7 @@ function Component(props) {
 下面展示两张 控制台打印的 `props.children对象` 结构
 ![图片](/public/props.children结构图.png)
 
+### React 的 类型（一些概要）
+#### JSXElementConstructor(类型)
+jsx 的标签的构造函数 -----> ReactElement.type
+
