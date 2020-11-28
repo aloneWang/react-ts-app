@@ -1,9 +1,10 @@
 import * as React from 'react'
 import { UploadProps, RequestOptions, Rcfile, RequestError } from './interface'
-import request from './request'
+import classNames from 'classnames'
+import defaultRequest from './request'
 import getUid from './uid'
 
-// 拿 fileList foreach poost, 放在微任务里， 调用 request
+// 拿 fileList foreach poost, 放在微任务里， 调用 defaultRequest
 const Upload: React.FC<UploadProps> = props => {
 
 	const reqs = React.useRef(new Map<React.Key, {abort(): void}>())
@@ -34,18 +35,46 @@ const Upload: React.FC<UploadProps> = props => {
 	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		let fileList = Array.prototype.slice.call(e.target.files)
 		fileList.forEach(file => {
-			post(file)
+			// post(file)
+			uploadFile(file, fileList)
 		})
 		// 更新
 		forceUpdate({})
 	}
 
+	const uploadFile = function(file: Rcfile, fileList: Rcfile[]) {
+		let {beforeUpload} = props
+
+		if(!beforeUpload) {
+			post(file)
+			return
+		}
+
+		const before = beforeUpload(file,fileList)
+		if(before && typeof before !== 'boolean' && before.then) {
+			before.then( proccessFile => {
+				const proccessFileType = Object.prototype.toString.call(proccessFile)
+				if(proccessFileType === '[object File]' || proccessFileType === '[object Blob]') {
+					post(proccessFile)
+					return
+				}
+				post(file)
+			})
+			.catch( err => {
+				console.log(err)
+			})
+		} else if(before !== false){
+			this.post(file)
+		}
+
+	}
 	const post = (file: Rcfile) => {
 		if(!isinit.current) return
 		file.uid = getUid()
 		let {
 			transformFile = originfile => originfile,
 			data,
+			onStart,
 			action,
 			name,
 			method,
@@ -65,7 +94,7 @@ const Upload: React.FC<UploadProps> = props => {
 				: data
 
 			const transform = Promise.all([data, newfile])
-
+			const request = props.customRequest || defaultRequest
 			transform.then(([data, newfile]: [object, Rcfile]) => {
 				const requestOptions: RequestOptions = {
 					filename: name,
@@ -85,19 +114,30 @@ const Upload: React.FC<UploadProps> = props => {
 						props.onProgress?.(e)
 					}
 				}
+				onStart?.(file)
 				reqs.current.set(file.uid,request(requestOptions))
 			})
 
 		})
 	}
 
+	const {
+		component: Tag = 'div',
+		prefixCls = 'rc-upload',
+		className
+	} = props
 	return (
-		<div>
+		<Tag
+			className={classNames(`${prefixCls}`, className)}
+		>
 			<input
 				type="file"
+				accept={props.accept}
+				multiple={props.multiple}
 				onChange={onChange}
 			/>
-		</div>
+			{props.children}
+		</Tag>
 	)
 }
 

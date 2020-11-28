@@ -1,3 +1,4 @@
+import { promises } from 'dns'
 import { type } from 'os'
 import * as React from 'react'
 
@@ -9,13 +10,16 @@ export interface UploadProps extends Omit<React.InputHTMLAttributes<HTMLInputEle
     style?: React.CSSProperties;
     className?: string;
     disable?: boolean;
-    // component?: keyof HTMLElementTagNameMap; //不确定
     component?: React.JSXElementConstructor<any>;
     action?: string | ((file?:Rcfile) => string);
     method?: UploadMethods;
     headers?: RequestHeaders;
     accept?: string;
     withCredentials?: boolean;
+    multiple?: boolean;
+    prefixCls?: string;
+    beforeUpload?(file: Rcfile, fileList: Rcfile[]): boolean | Promise<Rcfile>;
+    customRequest?: () => any;
     data?: object | ((file: any) => object);
     transformFile?: (file: Rcfile)=> string | Blob | Rcfile |  PromiseLike<string | Blob | Rcfile>
     onError?(e: Error, ret: object, file: Rcfile):void;

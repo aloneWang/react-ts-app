@@ -75,6 +75,7 @@ function LogProps(component) {
       )
     }
   }
+  // 这里使用 forwardRef 是为了接受ref
   return 
     React.forwardRef( (props, ref) => {
       return <Wrap  forwardRef={refs} {...props}/>
@@ -85,3 +86,4 @@ const ref= React.createRef()
 <HOC ref={ref}/>
 
 ```
+`注意`：不要再render方法中渲染 HOC, 因为每次更新，render里HOC都将会重新渲染一个组件，造成不必要的性能消耗
