@@ -18,6 +18,7 @@ export interface UploadProps extends Omit<React.InputHTMLAttributes<HTMLInputEle
     withCredentials?: boolean;
     multiple?: boolean;
     prefixCls?: string;
+    directory?: boolean;
     beforeUpload?(file: Rcfile, fileList: Rcfile[]): boolean | Promise<Rcfile>;
     customRequest?: () => any;
     data?: object | ((file: any) => object);
@@ -26,6 +27,7 @@ export interface UploadProps extends Omit<React.InputHTMLAttributes<HTMLInputEle
     onStart?(file: Rcfile):void;
     onSuccess?(ret: object, file: Rcfile, xhr: object):void;
     onProgress?(e: UploadProgress):void;
+    onDrop?(file?: any): void
 
 }
 export interface Rcfile extends File {

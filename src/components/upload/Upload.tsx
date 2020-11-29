@@ -33,15 +33,20 @@ const Upload: React.FC<UploadProps> = props => {
 		}
 	}
 	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		let fileList = Array.prototype.slice.call(e.target.files)
-		fileList.forEach(file => {
-			// post(file)
-			uploadFile(file, fileList)
-		})
+
+		uploadFilelist(e.target.files)
 		// 更新
 		forceUpdate({})
 	}
-
+	
+	const uploadFilelist = (file: FileList) => {
+		let fileList = Array.prototype.slice.call(file)
+		fileList.forEach((file: Rcfile)=> {
+			// post(file)
+			file.uid = getUid()
+			uploadFile(file, fileList)
+		})
+	}
 	const uploadFile = function(file: Rcfile, fileList: Rcfile[]) {
 		let {beforeUpload} = props
 
@@ -70,7 +75,6 @@ const Upload: React.FC<UploadProps> = props => {
 	}
 	const post = (file: Rcfile) => {
 		if(!isinit.current) return
-		file.uid = getUid()
 		let {
 			transformFile = originfile => originfile,
 			data,
@@ -121,20 +125,46 @@ const Upload: React.FC<UploadProps> = props => {
 		})
 	}
 
+	const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
+		e.preventDefault()
+		if(e.type === 'dragover') return
+		let {files} = e.dataTransfer
+
+		if(!props.multiple) {
+			files = Array.prototype.slice.call(files,0,1)
+		}
+			
+		uploadFilelist(files)
+		console.log(e.dataTransfer)
+		props.onDrop?.()
+	}
 	const {
 		component: Tag = 'div',
 		prefixCls = 'rc-upload',
 		className
 	} = props
+
+	const directory = props.directory 
+	? { directory: 'directory', webkitdirectory: 'webkitdirectory' } 
+	: {}
+	 
 	return (
 		<Tag
 			className={classNames(`${prefixCls}`, className)}
+			onDrop={onDrop}
+			onDragOver={onDrop}
+			style={{
+				height: '20px',
+				background: 'black'
+			}}
 		>
 			<input
 				type="file"
 				accept={props.accept}
 				multiple={props.multiple}
 				onChange={onChange}
+				style={{display: 'none'}}
+				{...directory}
 			/>
 			{props.children}
 		</Tag>

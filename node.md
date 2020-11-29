@@ -88,3 +88,8 @@ jsx 的标签的构造函数 -----> ReactElement.type
 
 ## 三方组件
 rc-motion 动画组件
+
+
+## 问题
+#### 拖拽上传图片
+在对input 标签 隐藏（display:none）后，在父标签上必须加上监听 `ondrop` 和 `ondragover` 事件，并且阻止默认动作

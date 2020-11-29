@@ -16,7 +16,7 @@ function App() {
     </div>
   )
   const uploadProps:UploadProps = {
-    onSuccess(xhr, body) {
+    onSuccess(body, xhr) {
       console.log(body)
     },
     onError(e: Error) {
@@ -24,7 +24,8 @@ function App() {
     },
     action: '/api/upload', // 在 nodeServe 仓库中
     method: 'post',
-    name: 'img'
+    name: 'img',
+    multiple: true
   }  
   return (
     <div className="App">
@@ -40,7 +41,7 @@ function App() {
         </TabPane>
       </Tabs>
       {/* <Steps /> */}
-      <Upload {...uploadProps}/>
+      <Upload {...uploadProps}>上传图片</Upload>
     </div>
   );
 }
